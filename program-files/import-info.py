@@ -46,25 +46,3 @@ else:
 # cdr event subscription - send 1 event at completion of a call - can use to determine which calls had recordings?
 # cdr field mapping - call-orig-call-id - Returns SIP Call-ID Header, can use to later retrieve info from specific call?
 # Make a new call - May allow to fake a call for testing purposes?
-
-# Add CDR event subscription to notify when a call is completed
-# Will use to check if call was recorded and store the call_ID if it was
-
-eventsUrl = "https://dev1.ns-api.com/ns-api/v2/subscriptions"
-
-cdrPayload = {
-    "subscription-geo-support": "yes",
-    "domain": "*",
-    "user": "*",
-    "model": "cdr",
-    "post-url": "https://server-url-here-for-receiving-events"
-}
-eventHeaders = {
-    "accept": "application/json",
-    "content-type": "application/json",
-    "authorization": f"Bearer {api_key}"
-}
-
-response = requests.post(eventsUrl, json=cdrPayload, headers=eventHeaders)
-
-print(response.text)
