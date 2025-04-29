@@ -13,10 +13,10 @@ getHeaders = {
 }
 
 # URL for Users in Sandbox Domain API endpoint
-usersUrl = "https://dev1.ns-api.com/ns-api/v2/domains/noliver.tvcinc.net/users?limit=100&start=0"
+usersUrl = "https://dev1.ns-api.com/ns-api/v2/domains/noliver.tvcinc.net/users"
 
 # URL for Users in Main TVC Domain API endpoint
-#usersUrl ="https://tvc.phoneware.cloud/ns-api/v2/domains/tvc/users?limit=100&start=0"
+#usersUrl ="https://tvc.phoneware.cloud/ns-api/v2/domains/tvc/users"
 
 # Desired fields to extract from users array
 #userParams = [
@@ -41,8 +41,20 @@ else:
     print(f"Error: {domainUsers.status_code}")
     exit(1)
 
-# How to determine when/where recordings are available?
-# Info in Netsapiens Event Subscriptions
 # cdr event subscription - send 1 event at completion of a call - can use to determine which calls had recordings?
 # cdr field mapping - call-orig-call-id - Returns SIP Call-ID Header, can use to later retrieve info from specific call?
-# Make a new call - May allow to fake a call for testing purposes?
+# cdr subscription added to domain in add-subscriptions.py
+
+# Read CDRs
+cdrUrl = "https://dev1.ns-api.com/ns-api/v2/cdrs"
+getCdr = requests.get(cdrUrl, headers=getHeaders)
+cdrJson = json.loads(getCdr.text)
+print(cdrJson)
+
+# Retrieve specific call info by call ID
+callId = "afn83q37rq9ap1oeglo2"
+callRecordUrl = f"https://dev1.ns-api.com/ns-api/v2/domains/noliver.tvcinc.net/recordings/{callId}"
+
+getCallRecord = requests.get(callRecordUrl, headers=getHeaders)
+callRecordJson = json.loads(getCallRecord.text)
+print(callRecordJson)
